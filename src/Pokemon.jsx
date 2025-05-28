@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "./index.css";
+import PokemonCards from "./PokemonCards";
 const Pokemon = () => {
 
     const [pokemon, setPokemon] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-
-    const API = "https://pokeapi.co/api/v2/pokemon?limit=24";
+    const API = "https://pokeapi.co/api/v2/pokemon?limit=64";
     const fetchPokemon = async () => {
         
 
@@ -23,15 +25,34 @@ const Pokemon = () => {
 
             const detailedResponses = await Promise.all(pokemonDetailedData);
             setPokemon(detailedResponses);
-            console.log(detailedResponses);
+            // console.log(detailedResponses);
+            setLoading(false);
             
         } catch (error) {
-            console.error(error);
+            setLoading(false);
+            setError(error);
         }
     };
     useEffect(() => {
         fetchPokemon();
     }, []);
+
+    if(loading) {
+        return (
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        );
+    }
+
+    if(error) {
+        return (
+            <div>
+                <h1>Error: {error.message}</h1>
+            </div>
+        );
+    }
+
   return (
     <>
     <section className="container">
@@ -45,9 +66,7 @@ const Pokemon = () => {
                 {
                     pokemon.map((currPokemon) => {
                         return (
-                            <li key={currPokemon.id}>
-                                {currPokemon.name}
-                            </li>
+                            <PokemonCards key={currPokemon.id} pokemonData={currPokemon} />
                         );
                     })
                 }
