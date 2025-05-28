@@ -15,7 +15,9 @@ const Pokemon = () => {
                 const data = await res.json();
                 return data;                
             });
-            console.log(pokemonDetailedData);
+
+            const detailedResponses = await Promise.all(pokemonDetailedData);
+            console.log(detailedResponses);
             
         } catch (error) {
             console.error(error);
