@@ -6,6 +6,7 @@ const Pokemon = () => {
     const [pokemon, setPokemon] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [search, setSearch] = useState('');
 
     const API = "https://pokeapi.co/api/v2/pokemon?limit=64";
     const fetchPokemon = async () => {
@@ -37,6 +38,10 @@ const Pokemon = () => {
         fetchPokemon();
     }, []);
 
+    //Search
+
+    const searchData = pokemon.filter((currPokemon) => currPokemon.name.toLowerCase().includes(search.toLowerCase()));
+
     if(loading) {
         return (
             <div>
@@ -55,16 +60,20 @@ const Pokemon = () => {
 
   return (
     <>
-    <section className="container">
+    <section className="container ">
         <header>
             <h1>
                 Let's Catch Them All!
             </h1>
         </header>
+        <div className="pokemon-search">
+            <input type="text" placeholder="Search Pokemon..." value={search} onChange={(e) => setSearch(e.target.value)}/>
+
+        </div>
         <div>
             <ul className="cards">
                 {
-                    pokemon.map((currPokemon) => {
+                    searchData.map((currPokemon) => {
                         return (
                             <PokemonCards key={currPokemon.id} pokemonData={currPokemon} />
                         );
